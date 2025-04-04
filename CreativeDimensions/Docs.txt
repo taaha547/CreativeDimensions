@@ -1,0 +1,76 @@
+Great! Let me explain how you can add your own Blender models and customize text for each model:
+
+Importing Blender Models
+File Format: Export your Blender models as .glb or .gltf files. These are the standard formats for 3D models on the web. GLB is generally preferred as it's a single binary file.
+
+Where to Place Files:
+
+Create a models folder in the client/public directory
+Upload your models there, for example: client/public/models/your-model.glb
+Model Size: Make sure your models are optimized for web (reduced polygon count) and properly sized in Blender before exporting.
+
+How to Implement the Models
+You'll need to modify the loadModels function in client/src/js/models.js. Currently, it's using placeholder shapes. You'll need to replace:
+
+// Replace this function to load your actual models
+async function loadModels(scene) {
+  // Create display platform
+  displayPlatform = createModelPlatform(scene);
+
+  // Use GLTFLoader to load your models
+  const loader = new THREE.GLTFLoader(loadingManager);
+
+  try {
+    // Load each model and add to the models array
+    const model1 = await loader.loadAsync('/models/your-first-model.glb');
+    model1.scene.position.set(1, 0, 0);
+    model1.scene.visible = false;
+    scene.add(model1.scene);
+    models.push(model1.scene);
+
+    // Repeat for each model
+    const model2 = await loader.loadAsync('/models/your-second-model.glb');
+    // etc...
+
+  } catch (error) {
+    console.error("Error loading models:", error);
+    // Fallback to placeholder models if needed
+    createPlaceholderModels(scene);
+  }
+
+  return models;
+}
+Customizing Text for Each Model
+Edit the Project Data: The text for each model is defined in the projectsData array in client/index.html:
+const projectsData = [
+  {
+    id: 1,
+    title: "Interactive Visualization",
+    description: "An interactive 3D visualization of data using modern web technologies.",
+    modelScale: 1.5
+  },
+  // Add more or modify existing projects
+];
+Adding New Projects: To add a new project, just add a new object to this array with:
+id: Unique identifier
+title: The title that will display
+description: The description text
+modelScale: How large the model should appear (adjust as needed)
+Adding Navigation Dots
+Navigation dots are automatically generated based on the number of items in the projectsData array. If you add more projects:
+
+The function createNavigationDots() in main.js will create a dot for each project
+Each dot will be clickable to navigate to that project
+Complete Workflow
+Export your models from Blender as GLB files
+Upload them to client/public/models/
+Edit client/index.html to:
+Update the projectsData array with your project information
+Make sure the number of projects matches the number of models you want to show
+Modify client/src/js/models.js to load your actual models instead of using the placeholder shapes
+When you do this, the website will automatically:
+
+Show the correct number of navigation dots
+Display your custom text for each project
+Show the corresponding 3D model when scrolling to each project
+Would you like me to implement these changes for you, or do you prefer to add your models yourself following these instructions?
